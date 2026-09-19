@@ -666,6 +666,8 @@ button {
     padding: 16px 20px;
     overflow-y: auto;
     flex: 1;
+    min-height: 0;
+    -webkit-overflow-scrolling: touch;
 }
 
 #sgdb-search-input {

@@ -845,6 +845,8 @@ const SGDB_PAGE_SIZE = 6;
 async function loadSgdbGrids(gameId, gameName) {
     const gridsDiv = document.getElementById("sgdb-grids");
     gridsDiv.innerHTML = `<p>Loading covers for ${escapeHtml(gameName)}…</p>`;
+    // Hide the game results list so covers have room
+    document.getElementById("sgdb-results").innerHTML = "";
 
     const oldBtn = document.querySelector(".sgdb-show-more");
     if (oldBtn) oldBtn.remove();
@@ -862,6 +864,10 @@ async function loadSgdbGrids(gameId, gameName) {
         sgdbAllGrids = data.data;
         gridsDiv.innerHTML = "";
         renderGridBatch();
+        // Scroll the covers into view
+        setTimeout(() => {
+            gridsDiv.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 50);
     } catch (e) {
         gridsDiv.innerHTML = `<p style="color:var(--brick)">Error: ${escapeHtml(e.message)}</p>`;
     }
