@@ -10,11 +10,6 @@ module.exports = function (eleventyConfig) {
     return `${dd}/${mm}/${yyyy}`;
   });
 
-  eleventyConfig.addPassthroughCopy({ "src/css": "css" });
-  eleventyConfig.addPassthroughCopy({ "src/js": "js" });
-  eleventyConfig.addPassthroughCopy({ "src/admin": "admin" });
-  eleventyConfig.addPassthroughCopy({ "src/images": "images" });
-
   eleventyConfig.addFilter("coverUrl", (path, baseUrl) => {
     if (!path) return "";
     if (path.startsWith("http://") || path.startsWith("https://")) return path;
@@ -22,6 +17,12 @@ module.exports = function (eleventyConfig) {
     if (path.startsWith("/")) return base + path;
     return base + "/" + path;
   });
+
+  
+  eleventyConfig.addPassthroughCopy({ "src/css": "css" });
+  eleventyConfig.addPassthroughCopy({ "src/js": "js" });
+  eleventyConfig.addPassthroughCopy({ "src/admin": "admin" });
+  eleventyConfig.addPassthroughCopy({ "src/images": "images" });
 
   return {
     dir: {

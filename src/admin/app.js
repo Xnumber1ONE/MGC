@@ -60,16 +60,10 @@ const COLLECTIONS = {
    ========================================================= */
 const SGDB_API_KEY = "5ba8781ab658ad31f402135c85ed9b42";
 const SGDB_BASE_URL = "https://www.steamgriddb.com/api/v2";
-const SGDB_PROXY = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
-    ? "http://localhost:3000/"
-    : "https://api.allorigins.win/raw?url=";
+const SGDB_PROXY_URL = "https://wispy-night-4eba.hmzmamouni.workers.dev/";
 
 async function sgdb(path) {
-    const target = `${SGDB_BASE_URL}${path}`;
-    const url = SGDB_PROXY + encodeURIComponent(target);
-    const res = await fetch(url, {
-        headers: { "Authorization": `Bearer ${SGDB_API_KEY}` }
-    });
+    const res = await fetch(`${SGDB_PROXY_URL}?path=${encodeURIComponent(path)}`);
     if (!res.ok) {
         const err = await res.json().catch(() => ({}));
         throw new Error(err.message || `SteamGridDB API error ${res.status}`);
