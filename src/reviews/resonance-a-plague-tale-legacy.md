@@ -8,7 +8,7 @@ platform:
   - PC
   - PS5
   - Xbox Series X/S
-cover_image: /images/uploads/078362809f1c629eb12cc418cdbeb500.png
+cover_image: https://cdn2.steamgriddb.com/grid/078362809f1c629eb12cc418cdbeb500.png
 date: "2026-09-12T23:07:00.000Z"
 excerpt: "Resonance: A Plague Tale Legacy is an upcoming action-adventure game developed by Asobo Studio and published by Focus Entertainment. Set 15 years before A Plague Tale: Requiem, it follows Sophia, a young plunderer, as she travels to Minotaur’s Island and searches for answers about her past. The game is described as an original story set in the A Plague Tale universe, featuring combat, puzzles, and mythological elements tied to the series’ wider history."
 pros:
