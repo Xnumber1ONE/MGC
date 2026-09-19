@@ -28,7 +28,7 @@ collections:
         name: "platform"
         widget: "select"
         multiple: true
-        options: ["PC", "PS5", "Xbox Series X/S", "Nintendo Switch", "Mobile", "PS4", "Xbox One"]
+        options: ["PC", "PS5", "XBOX Series X/S", "Nintendo Switch 2", "PS4", "XBOX One", "Nintendo Switch","PS3", "XBOX 360", "Android", "IOS"]
         required: true
       - { label: "Cover image", name: "cover_image", widget: "image", required: true }
       - { label: "Publish date", name: "date", widget: "datetime", required: true }
