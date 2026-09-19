@@ -791,3 +791,20 @@ button {
         gap: 6px;
     }
 }
+
+.sgdb-show-more {
+    display: block;
+    margin: 12px auto 0;
+    padding: 10px 20px;
+    background: var(--surface-alt);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+.sgdb-show-more:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+}

@@ -785,6 +785,8 @@ function openSgdbModal() {
     document.getElementById("sgdb-search-input").value = "";
     document.getElementById("sgdb-results").innerHTML = "";
     document.getElementById("sgdb-grids").innerHTML = "";
+    sgdbAllGrids = [];
+    sgdbShownCount = 0;
     document.getElementById("sgdb-search-input").focus();
 }
 
@@ -880,6 +882,14 @@ function renderGridBatch() {
         btn.addEventListener("click", renderGridBatch);
         gridsDiv.insertAdjacentElement("afterend", btn);
     }
+
+    // Smooth-scroll the modal to reveal the new items
+    setTimeout(() => {
+        document.querySelector(".sgdb-modal-body").scrollTo({
+            top: document.querySelector(".sgdb-modal-body").scrollHeight,
+            behavior: "smooth"
+        });
+    }, 50);
 }
 
 function selectSgdbGrid(imageUrl, thumbUrl) {
