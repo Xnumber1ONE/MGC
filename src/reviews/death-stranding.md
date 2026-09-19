@@ -11,7 +11,7 @@ platform:
   - Xbox Series X/S
   - PS4
   - Xbox One
-cover_image: /images/uploads/df31a636d493b0e715a5978a1c873f64.png
+cover_image: https://cdn2.steamgriddb.com/grid/df31a636d493b0e715a5978a1c873f64.png
 date: "2026-09-14T11:35:00.000Z"
 excerpt: |-
   Death Stranding is an action game set in a post-apocalyptic United States.
