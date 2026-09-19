@@ -15,6 +15,14 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/admin": "admin" });
   eleventyConfig.addPassthroughCopy({ "src/images": "images" });
 
+  eleventyConfig.addFilter("coverUrl", (path, baseUrl) => {
+    if (!path) return "";
+    if (path.startsWith("http://") || path.startsWith("https://")) return path;
+    const base = baseUrl || "";
+    if (path.startsWith("/")) return base + path;
+    return base + "/" + path;
+  });
+
   return {
     dir: {
       input: "src",

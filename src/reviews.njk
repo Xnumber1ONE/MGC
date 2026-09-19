@@ -3,69 +3,66 @@ layout: base.njk
 title: "Reviews"
 permalink: "/reviews.html"
 ---
-{% set allReviews = collections.reviews | reverse %}
 
+{% set allReviews = collections.reviews | reverse %}
 <section class="section" style="border-bottom:none; padding-bottom:0;">
   <div class="container">
     <h1 style="font-size:2rem; margin-bottom:24px;">All reviews</h1>
     <div class="genre-carousel">
-    <button class="genre-arrow genre-arrow-left" type="button" aria-label="Scroll genres left">
+      <button class="genre-arrow genre-arrow-left" type="button" aria-label="Scroll genres left">
         &#10094;
-    </button>
-
-    <div class="chips-container">
+      </button>
+      <div class="chips-container">
         <div class="chips" role="group" aria-label="Filter by genre">
-      <button class="chip" data-genre="all" aria-pressed="true">All</button>
-      <button class="chip" data-genre="action">Action</button>
-      <button class="chip" data-genre="rpg">RPG</button>
-      <button class="chip" data-genre="souls">Soulslike</button>
-      <button class="chip" data-genre="open-world">Open World</button>
-      <button class="chip" data-genre="racing">Racing</button>
-      <button class="chip" data-genre="adventure">Adventure</button>
-      <button class="chip" data-genre="shooter">Shooter</button>
-      <button class="chip" data-genre="strategy">Strategy</button>
-      <button class="chip" data-genre="simulation">Simulation</button>
-      <button class="chip" data-genre="sports">Sports</button>
-      <button class="chip" data-genre="puzzle">Puzzle</button>
-      <button class="chip" data-genre="horror">Horror</button>
-      <button class="chip" data-genre="platformer">Platformer</button>
-      <button class="chip" data-genre="fighting">Fighting</button>
-      <button class="chip" data-genre="mmo">MMO</button>
-      <button class="chip" data-genre="stealth">Stealth</button>
-      <button class="chip" data-genre="survival">Survival</button>
-      <button class="chip" data-genre="rhythm">Rhythm</button>
-      <button class="chip" data-genre="visual-novel">Visual Novel</button>
-      <button class="chip" data-genre="party">Party</button>
-      <button class="chip" data-genre="educational">Educational</button>
-            </div>
-    </div>
-
-    <button class="genre-arrow genre-arrow-right" type="button" aria-label="Scroll genres right">
+          <button class="chip" data-genre="all" aria-pressed="true">All</button>
+          <button class="chip" data-genre="action">Action</button>
+          <button class="chip" data-genre="rpg">RPG</button>
+          <button class="chip" data-genre="souls">Soulslike</button>
+          <button class="chip" data-genre="open-world">Open World</button>
+          <button class="chip" data-genre="racing">Racing</button>
+          <button class="chip" data-genre="adventure">Adventure</button>
+          <button class="chip" data-genre="shooter">Shooter</button>
+          <button class="chip" data-genre="strategy">Strategy</button>
+          <button class="chip" data-genre="simulation">Simulation</button>
+          <button class="chip" data-genre="sports">Sports</button>
+          <button class="chip" data-genre="puzzle">Puzzle</button>
+          <button class="chip" data-genre="horror">Horror</button>
+          <button class="chip" data-genre="platformer">Platformer</button>
+          <button class="chip" data-genre="fighting">Fighting</button>
+          <button class="chip" data-genre="mmo">MMO</button>
+          <button class="chip" data-genre="stealth">Stealth</button>
+          <button class="chip" data-genre="survival">Survival</button>
+          <button class="chip" data-genre="rhythm">Rhythm</button>
+          <button class="chip" data-genre="visual-novel">Visual Novel</button>
+          <button class="chip" data-genre="party">Party</button>
+          <button class="chip" data-genre="educational">Educational</button>
+        </div>
+      </div>
+      <button class="genre-arrow genre-arrow-right" type="button" aria-label="Scroll genres right">
         &#10095;
-    </button>
-</div>
+      </button>
+    </div>
   </div>
 </section>
-
 <section class="section" style="border-bottom:none;">
   <div class="container">
     {% if allReviews.length > 0 %}
-    <div class="grid">
-      {% for review in allReviews %}
-      <a class="card" href="{{ baseUrl }}{{ review.url }}" data-genre-tag="{{ review.data.meta | join(' ') }}">
-        <div class="cover {{ review.data.cover_class }}">
-          {% if review.data.cover_image %}
-          <img src="{{ baseUrl }}{{ review.data.cover_image }}" alt="{{ review.data.title }}" class="cover-image">
-          {% else %}
-          <span class="cover-label">{{ review.data.title }}</span>
-          {% endif %}
+      <div class="grid">
+        {% for review in allReviews %}
+          <a class="card" href="{{ baseUrl }}{{ review.url }}" data-genre-tag="{{ review.data.meta | join(' ') }}">
+            <div class="cover {{ review.data.cover_class }}">
+              {% if review.data.cover_image %}
+                <img src="{{ review.data.cover_image | coverUrl(baseUrl) }} " alt="{{ review.data.title }}" class="cover-image">
+                {% else %}
+                  <span class="cover-label">{{ review.data.title }}</span>
+                {% endif %}
+              </div>
+              <h3>{{ review.data.title }}</h3>
+            </a>
+          {% endfor %}
         </div>
-        <h3>{{ review.data.title }}</h3>
-      </a>
-      {% endfor %}
+      {% else %}
+        <p style="color:var(--text-muted);">No reviews published yet — check back soon.</p>
+      {% endif %}
     </div>
-    {% else %}
-    <p style="color:var(--text-muted);">No reviews published yet — check back soon.</p>
-    {% endif %}
-  </div>
-</section>
+  </section>

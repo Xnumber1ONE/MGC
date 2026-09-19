@@ -13,101 +13,101 @@ permalink: "/index.html"
   <div class="container">
     <div class="cover {{ hero.data.cover_class }}">
       {% if hero.data.cover_image %}
-              <img src="{{ baseUrl }}{{ hero.data.cover_image }}" alt="{{ hero.data.title }}" class="cover-image">
-              {% else %}
-                <span class="cover-label">{{ hero.data.title }}</span>
-              {% endif %}
+        <img src="{{ hero.data.cover_image | coverUrl(baseUrl) }}" alt="{{ hero.data.title }}" class="cover-image">
+        {% else %}
+          <span class="cover-label">{{ hero.data.title }}</span>
+        {% endif %}
+      </div>
+      <div>
+        <p class="hero-kicker">Special Review</p>
+        <h1>{{ hero.data.title }}</h1>
+        <p class="excerpt">{{ hero.data.excerpt }}</p>
+        <a href="{{ baseUrl }}{{ hero.url }}" class="btn">Read the full review</a>
+      </div>
     </div>
-    <div>
-      <p class="hero-kicker">Special Review</p>
-      <h1>{{ hero.data.title }}</h1>
-      <p class="excerpt">{{ hero.data.excerpt }}</p>
-      <a href="{{ baseUrl }}{{ hero.url }}" class="btn">Read the full review</a>
-    </div>
-  </div>
-</section>
-<section class="section">
-  <div class="container">
-    <div class="section-head">
-      <h2>Latest reviews</h2>
-      <a href="{{ baseUrl }}/reviews.html">See more</a>
-    </div>
-        <div class="content-carousel">
-      <button class="genre-arrow carousel-arrow-left" type="button" aria-label="Scroll reviews left">&#10094;</button>
-      <div class="carousel-container">
-        <div class="carousel-track">
-      {% for review in allReviews.slice(1, 6) %}
-        <a class="card" href="{{ baseUrl }}{{ review.url }}">
-          <div class="cover {{ review.data.cover_class }}">
-            {% if review.data.cover_image %}
-              <img src="{{ baseUrl }}{{ review.data.cover_image }}" alt="{{ review.data.title }}" class="cover-image">
-              {% else %}
-                <span class="cover-label">{{ review.data.title }}</span>
-              {% endif %}
+  </section>
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2>Latest reviews</h2>
+        <a href="{{ baseUrl }}/reviews.html">See more</a>
+      </div>
+      <div class="content-carousel">
+        <button class="genre-arrow carousel-arrow-left" type="button" aria-label="Scroll reviews left">&#10094;</button>
+        <div class="carousel-container">
+          <div class="carousel-track">
+            {% for review in allReviews.slice(1, 6) %}
+              <a class="card" href="{{ baseUrl }}{{ review.url }}">
+                <div class="cover {{ review.data.cover_class }}">
+                  {% if review.data.cover_image %}
+                    <img src="{{ review.data.cover_image | coverUrl(baseUrl) }} " alt="{{ review.data.title }}" class="cover-image">
+                    {% else %}
+                      <span class="cover-label">{{ review.data.title }}</span>
+                    {% endif %}
+                  </div>
+                  <h3>{{ review.data.title }}</h3>
+                </a>
+              {% endfor %}
             </div>
-            <h3>{{ review.data.title }}</h3>
-          </a>
-        {% endfor %}
+          </div>
+          <button class="genre-arrow carousel-arrow-right" type="button" aria-label="Scroll reviews right">&#10095;</button>
         </div>
-      </div>
-      <button class="genre-arrow carousel-arrow-right" type="button" aria-label="Scroll reviews right">&#10095;</button>
-    </div>
-  </section>
-  <section class="section">
-    <div class="container">
-      <div class="section-head">
-        <h2>Latest news</h2>
-        <a href="{{ baseUrl }}/news.html">See more</a>
-      </div>
-            <div class="content-carousel">
-        <button class="genre-arrow carousel-arrow-left" type="button" aria-label="Scroll news left">&#10094;</button>
-        <div class="carousel-container">
-          <div class="carousel-track">
-        {% if allNews.length > 0 %}
-          {% for item in allNews.slice(0, 5) %}
-            <a class="news-row" href="{{ baseUrl }}{{ item.url }}">
-              <time>{{ item.data.date | date }}</time>
-              <div>
-                <h3>{{ item.data.title }}</h3>
-                <p>{{ item.data.excerpt }}</p>
+      </section>
+      <section class="section">
+        <div class="container">
+          <div class="section-head">
+            <h2>Latest news</h2>
+            <a href="{{ baseUrl }}/news.html">See more</a>
+          </div>
+          <div class="content-carousel">
+            <button class="genre-arrow carousel-arrow-left" type="button" aria-label="Scroll news left">&#10094;</button>
+            <div class="carousel-container">
+              <div class="carousel-track">
+                {% if allNews.length > 0 %}
+                  {% for item in allNews.slice(0, 5) %}
+                    <a class="news-row" href="{{ baseUrl }}{{ item.url }}">
+                      <time>{{ item.data.date | date }}</time>
+                      <div>
+                        <h3>{{ item.data.title }}</h3>
+                        <p>{{ item.data.excerpt }}</p>
+                      </div>
+                    </a>
+                  {% endfor %}
+                {% else %}
+                  <p style="color:var(--text-muted);">No news published yet.</p>
+                {% endif %}
               </div>
-            </a>
-          {% endfor %}
-        {% else %}
-          <p style="color:var(--text-muted);">No news published yet.</p>
-        {% endif %}
+            </div>
+            <button class="genre-arrow carousel-arrow-right" type="button" aria-label="Scroll news right">&#10095;</button>
           </div>
         </div>
-        <button class="genre-arrow carousel-arrow-right" type="button" aria-label="Scroll news right">&#10095;</button>
-      </div>
-    </div>
-  </section>
-  <section class="section">
-    <div class="container">
-      <div class="section-head">
-        <h2>Latest articles</h2>
-        <a href="{{ baseUrl }}/articles.html">See more</a>
-      </div>
-            <div class="content-carousel">
-        <button class="genre-arrow carousel-arrow-left" type="button" aria-label="Scroll news left">&#10094;</button>
-        <div class="carousel-container">
-          <div class="carousel-track">
-        {% if allArticles.length > 0 %}
-          {% for item in allArticles.slice(0, 5) %}
-            <a class="news-row" href="{{ baseUrl }}{{ item.url }}">
-              <time>{{ item.data.date | date }}</time>
-              <div>
-                <h3>{{ item.data.title }}</h3>
-                <p>{{ item.data.excerpt }}</p>
+      </section>
+      <section class="section">
+        <div class="container">
+          <div class="section-head">
+            <h2>Latest articles</h2>
+            <a href="{{ baseUrl }}/articles.html">See more</a>
+          </div>
+          <div class="content-carousel">
+            <button class="genre-arrow carousel-arrow-left" type="button" aria-label="Scroll news left">&#10094;</button>
+            <div class="carousel-container">
+              <div class="carousel-track">
+                {% if allArticles.length > 0 %}
+                  {% for item in allArticles.slice(0, 5) %}
+                    <a class="news-row" href="{{ baseUrl }}{{ item.url }}">
+                      <time>{{ item.data.date | date }}</time>
+                      <div>
+                        <h3>{{ item.data.title }}</h3>
+                        <p>{{ item.data.excerpt }}</p>
+                      </div>
+                    </a>
+                  {% endfor %}
+                {% else %}
+                  <p style="color:var(--text-muted);">No articles published yet.</p>
+                {% endif %}
               </div>
-            </a>
-          {% endfor %}
-        {% else %}
-          <p style="color:var(--text-muted);">No articles published yet.</p>
-        {% endif %}
+            </div>
+            <button class="genre-arrow carousel-arrow-right" type="button" aria-label="Scroll news right">&#10095;</button>
           </div>
         </div>
-        <button class="genre-arrow carousel-arrow-right" type="button" aria-label="Scroll news right">&#10095;</button>
-      </div>
-    </div>
-  </section>
+      </section>

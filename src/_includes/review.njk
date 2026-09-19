@@ -24,7 +24,7 @@ layout: base.njk
       
       <div class="cover {{ cover_class }}">
         {% if cover_image %}
-        <img src="{{ baseUrl }}{{ cover_image }}" alt="{{ title }}" class="cover-image">
+        <img src="{{ cover_image | coverUrl(baseUrl) }}" alt="{{ title }}" class="cover-image">
         {% else %}
         <span class="cover-label">{{ title }}</span>
         {% endif %}

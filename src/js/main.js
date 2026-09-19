@@ -228,10 +228,12 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       listBox.innerHTML = matches.map(function (item) {
+        var coverSrc = item.cover
+          ? (item.cover.startsWith("http") ? item.cover : baseUrl + item.cover)
+          : "";
         var coverHtml = item.cover
-          ? '<img class="nav-search-cover" src="' + baseUrl + item.cover + '" alt="">'
+          ? '<img class="nav-search-cover" src="' + coverSrc + '" alt="">'
           : '<div class="nav-search-cover nav-search-cover-empty"></div>';
-
         var dateStr = "";
         if (item.date) {
           var d = new Date(item.date);
