@@ -58,8 +58,6 @@ const COLLECTIONS = {
 /* =========================================================
    STEAMGRIDDB API
    ========================================================= */
-const SGDB_API_KEY = "5ba8781ab658ad31f402135c85ed9b42";
-const SGDB_BASE_URL = "https://www.steamgriddb.com/api/v2";
 const SGDB_PROXY_URL = "https://wispy-night-4eba.hmzmamouni.workers.dev/";
 
 async function sgdb(path) {
@@ -816,25 +814,71 @@ async function searchSgdbGames(term) {
     }
 }
 
+let sgdbAllGrids = [];
+let sgdbShownCount = 0;
+const SGDB_PAGE_SIZE = 5;
+
 async function loadSgdbGrids(gameId, gameName) {
     const gridsDiv = document.getElementById("sgdb-grids");
     gridsDiv.innerHTML = `<p>Loading covers for ${escapeHtml(gameName)}…</p>`;
+
     try {
         const data = await sgdb(`/grids/game/${gameId}?dimensions=600x900,342x482`);
         if (!data.data || !data.data.length) {
             gridsDiv.innerHTML = `<p>No grids found for this game.</p>`;
             return;
         }
-        gridsDiv.innerHTML = data.data.map(grid => `
+
+        sgdbAllGrids = data.data;
+        sgdbShownCount = 0;
+        gridsDiv.innerHTML = "";
+
+        renderGridBatch();
+    } catch (e) {
+        gridsDiv.innerHTML = `<p style="color:var(--brick)">Error: ${escapeHtml(e.message)}</p>`;
+    }
+}
+
+function renderGridBatch() {
+    const gridsDiv = document.getElementById("sgdb-grids");
+    const end = Math.min(sgdbShownCount + SGDB_PAGE_SIZE, sgdbAllGrids.length);
+    const batch = sgdbAllGrids.slice(sgdbShownCount, end);
+
+    // Remove old "Show more" button if present
+    const oldBtn = gridsDiv.querySelector(".sgdb-show-more");
+    if (oldBtn) oldBtn.remove();
+
+    // Append new grid items
+    const html = batch.map(grid => `
       <div class="sgdb-grid-item" data-url="${grid.url}" data-thumb="${grid.thumb}">
         <img src="${grid.thumb}" alt="Cover option" loading="lazy" />
       </div>
     `).join("");
-        gridsDiv.querySelectorAll(".sgdb-grid-item").forEach(item => {
+
+    gridsDiv.insertAdjacentHTML("beforeend", html);
+
+    // Attach click handlers to the new items only
+    const newItems = gridsDiv.querySelectorAll(".sgdb-grid-item");
+    const startIdx = sgdbShownCount;
+    for (let i = startIdx; i < end; i++) {
+        const item = newItems[i];
+        if (item && !item.dataset.bound) {
+            item.dataset.bound = "1";
             item.addEventListener("click", () => selectSgdbGrid(item.dataset.url, item.dataset.thumb));
-        });
-    } catch (e) {
-        gridsDiv.innerHTML = `<p style="color:var(--brick)">Error: ${escapeHtml(e.message)}</p>`;
+        }
+    }
+
+    sgdbShownCount = end;
+
+    // Show "Show more" button if there are more
+    if (sgdbShownCount < sgdbAllGrids.length) {
+        const remaining = sgdbAllGrids.length - sgdbShownCount;
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "btn sgdb-show-more";
+        btn.textContent = `Show ${Math.min(SGDB_PAGE_SIZE, remaining)} more (${remaining} left)`;
+        btn.addEventListener("click", renderGridBatch);
+        gridsDiv.insertAdjacentElement("afterend", btn);
     }
 }
 
