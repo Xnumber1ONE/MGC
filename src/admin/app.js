@@ -666,17 +666,10 @@ function attachEditHandlers() {
         if (term.length < 3) {
             document.getElementById("sgdb-results").innerHTML = "";
             document.getElementById("sgdb-grids").innerHTML = "";
-            document.querySelectorAll(".sgdb-show-more, .sgdb-end-note").forEach(el => el.remove());
-            sgdbAllGrids = [];
-            sgdbShownCount = 0;
             return;
         }
-        // Fresh search clears grids
+        // Fresh search clears previous grids
         document.getElementById("sgdb-grids").innerHTML = "";
-        document.querySelectorAll(".sgdb-show-more, .sgdb-end-note").forEach(el => el.remove());
-        sgdbAllGrids = [];
-        sgdbShownCount = 0;
-
         searchSgdbGames(term);
     }, 400));
 }
@@ -796,18 +789,9 @@ function openSgdbModal() {
     document.getElementById("sgdb-results").innerHTML = "";
     document.getElementById("sgdb-grids").innerHTML = "";
 
-    // Remove leftover "show more" / end notes
-    document.querySelectorAll(".sgdb-show-more, .sgdb-end-note").forEach(el => el.remove());
-
-    sgdbAllGrids = [];
-    sgdbShownCount = 0;
-    sgdbIsLoadingMore = false;
-
-    // Reset scroll to top
     const modalBody = document.querySelector(".sgdb-modal-body");
     if (modalBody) modalBody.scrollTop = 0;
 
-    attachSgdbInfiniteScroll();
     document.getElementById("sgdb-search-input").focus();
 }
 
@@ -837,23 +821,12 @@ async function searchSgdbGames(term) {
     }
 }
 
-let sgdbAllGrids = [];
-let sgdbShownCount = 0;
-let sgdbIsLoadingMore = false;
-const SGDB_PAGE_SIZE = 9;
-
 async function loadSgdbGrids(gameId, gameName) {
     const gridsDiv = document.getElementById("sgdb-grids");
     gridsDiv.innerHTML = `<p>Loading covers for ${escapeHtml(gameName)}…</p>`;
+
     // Hide the game results list so covers have room
     document.getElementById("sgdb-results").innerHTML = "";
-
-    const oldBtn = document.querySelector(".sgdb-show-more");
-    if (oldBtn) oldBtn.remove();
-
-    sgdbAllGrids = [];
-    sgdbShownCount = 0;
-    sgdbIsLoadingMore = false;
 
     try {
         const data = await sgdb(`/grids/game/${gameId}?dimensions=600x900,342x482`);
@@ -861,76 +834,25 @@ async function loadSgdbGrids(gameId, gameName) {
             gridsDiv.innerHTML = `<p>No grids found for this game.</p>`;
             return;
         }
-        sgdbAllGrids = data.data;
-        gridsDiv.innerHTML = "";
-        renderGridBatch();
-        // Scroll the covers into view
+
+        gridsDiv.innerHTML = data.data.map(grid => `
+          <div class="sgdb-grid-item" data-url="${grid.url}" data-thumb="${grid.thumb}">
+            <img src="${grid.thumb}" alt="Cover option" loading="lazy" />
+          </div>
+        `).join("");
+
+        gridsDiv.querySelectorAll(".sgdb-grid-item").forEach(item => {
+            item.addEventListener("click", () => selectSgdbGrid(item.dataset.url, item.dataset.thumb));
+        });
+
+        // Scroll covers into view
         setTimeout(() => {
             gridsDiv.scrollIntoView({ behavior: "smooth", block: "start" });
         }, 50);
+
     } catch (e) {
         gridsDiv.innerHTML = `<p style="color:var(--brick)">Error: ${escapeHtml(e.message)}</p>`;
     }
-}
-
-function renderGridBatch() {
-    if (sgdbIsLoadingMore) return;
-    if (sgdbShownCount >= sgdbAllGrids.length) return;
-
-    sgdbIsLoadingMore = true;
-
-    const gridsDiv = document.getElementById("sgdb-grids");
-    const end = Math.min(sgdbShownCount + SGDB_PAGE_SIZE, sgdbAllGrids.length);
-    const batch = sgdbAllGrids.slice(sgdbShownCount, end);
-
-    const html = batch.map(grid => `
-      <div class="sgdb-grid-item" data-url="${grid.url}" data-thumb="${grid.thumb}">
-        <img src="${grid.thumb}" alt="Cover option" loading="lazy" />
-      </div>
-    `).join("");
-
-    gridsDiv.insertAdjacentHTML("beforeend", html);
-
-    // Bind click handlers on the new items only
-    const allItems = gridsDiv.querySelectorAll(".sgdb-grid-item");
-    for (let i = sgdbShownCount; i < end; i++) {
-        const item = allItems[i];
-        if (item && !item.dataset.bound) {
-            item.dataset.bound = "1";
-            item.addEventListener("click", () => selectSgdbGrid(item.dataset.url, item.dataset.thumb));
-        }
-    }
-
-    sgdbShownCount = end;
-    sgdbIsLoadingMore = false;
-
-    // If everything is loaded, show a small note
-    if (sgdbShownCount >= sgdbAllGrids.length) {
-        const note = document.createElement("p");
-        note.className = "sgdb-end-note";
-        note.textContent = "All covers loaded";
-        gridsDiv.insertAdjacentElement("afterend", note);
-    }
-}
-
-// Attach infinite scroll once
-function attachSgdbInfiniteScroll() {
-    const modalBody = document.querySelector(".sgdb-modal-body");
-    if (!modalBody || modalBody.dataset.scrollBound) return;
-    modalBody.dataset.scrollBound = "1";
-
-    modalBody.addEventListener("scroll", () => {
-        // Only paginate when grids are showing (not during game search)
-        if (!sgdbAllGrids.length) return;
-
-        const nearBottom =
-            modalBody.scrollTop + modalBody.clientHeight >=
-            modalBody.scrollHeight - 120;
-
-        if (nearBottom) {
-            renderGridBatch();
-        }
-    });
 }
 
 function selectSgdbGrid(imageUrl, thumbUrl) {

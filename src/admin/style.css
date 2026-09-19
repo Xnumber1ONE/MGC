@@ -486,7 +486,6 @@ button {
    ========================================================= */
 @media (max-width: 640px) {
 
-    /* Header: stack title above buttons */
     .admin-header {
         padding: 12px 16px;
         flex-wrap: wrap;
@@ -507,7 +506,6 @@ button {
         justify-content: center;
     }
 
-    /* Tabs: shrink and allow horizontal scroll */
     .tabs {
         padding: 0 12px;
         overflow-x: auto;
@@ -525,12 +523,10 @@ button {
         flex-shrink: 0;
     }
 
-    /* Main content: less padding */
     .main {
         padding: 16px 12px;
     }
 
-    /* List header: stack */
     .list-header {
         flex-direction: column;
         align-items: stretch;
@@ -546,7 +542,6 @@ button {
         justify-content: center;
     }
 
-    /* List items: stack buttons under info */
     .list-item {
         flex-wrap: wrap;
         padding: 12px;
@@ -575,14 +570,12 @@ button {
         justify-content: center;
     }
 
-    /* Form buttons (Cancel / Save / Publish) */
     #cancel-btn,
     #save-btn {
         flex: 1;
         justify-content: center;
     }
 
-    /* Toast: full width at bottom */
     .toast {
         left: 12px;
         right: 12px;
@@ -592,7 +585,6 @@ button {
         padding: 12px 14px;
     }
 
-    /* EasyMDE: smaller font, tighter toolbar */
     .EasyMDEContainer .CodeMirror {
         font-size: 0.9rem;
     }
@@ -606,13 +598,11 @@ button {
         height: 28px;
     }
 
-    /* Chip group: slightly smaller */
     .chip-opt {
         font-size: 0.8rem;
         padding: 4px 8px;
     }
 
-    /* Image preview: allow smaller */
     .img-preview {
         max-width: 100%;
         max-height: 220px;
@@ -643,7 +633,7 @@ button {
     border-radius: 8px;
     max-width: 800px;
     width: 100%;
-    height: 85vh;         /* ← fixed height, not max */
+    max-height: 85vh;
     display: flex;
     flex-direction: column;
 }
@@ -741,7 +731,7 @@ button {
     }
 
     .sgdb-modal-content {
-        height: 92vh;
+        max-height: 92vh;
     }
 
     .sgdb-modal-header {
@@ -770,7 +760,7 @@ button {
 
 @media (max-height: 500px) and (max-width: 1000px) {
     .sgdb-modal-content {
-        height: 95vh;
+        max-height: 95vh;
     }
 
     .sgdb-modal-header {
@@ -792,29 +782,4 @@ button {
         grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
         gap: 6px;
     }
-}
-
-.sgdb-show-more {
-    display: block;
-    margin: 12px auto 0;
-    padding: 10px 20px;
-    background: var(--surface-alt);
-    border: 1px solid var(--border);
-    color: var(--text);
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 0.9rem;
-}
-.sgdb-show-more:hover {
-    border-color: var(--gold);
-    color: var(--gold);
-}
-
-.sgdb-end-note {
-    text-align: center;
-    color: var(--text-muted);
-    font-size: 0.85rem;
-    padding: 12px 0;
-    margin: 0;
 }
