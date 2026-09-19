@@ -839,35 +839,6 @@ async function searchSgdbGames(term) {
 
 let sgdbAllGrids = [];
 let sgdbShownCount = 0;
-const SGDB_PAGE_SIZE = 5;
-
-async function loadSgdbGrids(gameId, gameName) {
-    const gridsDiv = document.getElementById("sgdb-grids");
-    gridsDiv.innerHTML = `<p>Loading covers for ${escapeHtml(gameName)}…</p>`;
-
-    // Remove any leftover "Show more" button from a previous game
-    const oldBtn = document.querySelector(".sgdb-show-more");
-    if (oldBtn) oldBtn.remove();
-
-    try {
-        const data = await sgdb(`/grids/game/${gameId}?dimensions=600x900,342x482`);
-        if (!data.data || !data.data.length) {
-            gridsDiv.innerHTML = `<p>No grids found for this game.</p>`;
-            return;
-        }
-
-        sgdbAllGrids = data.data;
-        sgdbShownCount = 0;
-        gridsDiv.innerHTML = "";
-
-        renderGridBatch();
-    } catch (e) {
-        gridsDiv.innerHTML = `<p style="color:var(--brick)">Error: ${escapeHtml(e.message)}</p>`;
-    }
-}
-
-let sgdbAllGrids = [];
-let sgdbShownCount = 0;
 let sgdbIsLoadingMore = false;
 const SGDB_PAGE_SIZE = 5;
 
