@@ -131,7 +131,7 @@ p {
 
 .main-nav a {
   font-size: 0.95rem;
-  color: var(--text-muted);
+  color: var(--white);
   padding: 6px 2px;
   border-bottom: 2px solid transparent;
   white-space: nowrap;
@@ -348,7 +348,7 @@ p {
    Section headings
    ============================================ */
 .section {
-  padding: 60px 0;
+  padding: 40px 0 16px;
   border-bottom: 1px solid var(--border);
 }
 
@@ -365,7 +365,7 @@ p {
 }
 
 .section-head a {
-  color: var(--text-muted);
+  color: --white;
   font-size: 0.9rem;
 }
 
@@ -856,13 +856,10 @@ p {
 }
 
 .site-footer .links a {
-  color: var(--text-muted);
+  color: rgb(0, 247, 255);
   font-size: 0.9rem;
 }
 
-.site-footer .links a:hover {
-  color: var(--gold);
-}
 
 /* Mobile: adjust nav search icon */
 @media (max-width: 760px) {
@@ -1185,24 +1182,48 @@ p {
 /* Landscape phones / short screens: use mobile layout */
 @media (max-height: 500px) and (max-width: 1000px) {
 
-  /* ---- Hero: single column ---- */
+  /* ---- Hero: side-by-side, compact for short screens ---- */
   .hero {
-    padding: 24px 0 32px;
+    padding: 16px 0 20px;
   }
 
   .hero .container {
-    grid-template-columns: 1fr;
-    gap: 24px;
+    grid-template-columns: 160px 1fr;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .hero .cover {
+    width: 160px;
+    aspect-ratio: 3 / 4;
+  }
+
+  .hero-kicker {
+    font-size: 0.8rem;
+    margin-bottom: 6px;
   }
 
   .hero h1 {
-    font-size: 1.6rem;
-    margin-bottom: 12px;
+    font-size: 1.25rem;
+    margin-bottom: 8px;
+    line-height: 1.2;
   }
 
   .hero .excerpt {
-    font-size: 1rem;
-    margin-bottom: 16px;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin-bottom: 10px;
+    max-width: none;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .hero .btn {
+    padding: 6px 16px;
+    font-size: 0.85rem;
   }
 
   /* ---- Card grid: 2 columns ---- */
@@ -1223,7 +1244,7 @@ p {
   }
 
   .carousel-track>* {
-    flex: 0 0 calc((100% - 28px) / 2);
+    flex: 0 0 170px;
     scroll-snap-align: start;
   }
 
