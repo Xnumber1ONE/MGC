@@ -840,7 +840,7 @@ async function searchSgdbGames(term) {
 let sgdbAllGrids = [];
 let sgdbShownCount = 0;
 let sgdbIsLoadingMore = false;
-const SGDB_PAGE_SIZE = 6;
+const SGDB_PAGE_SIZE = 9;
 
 async function loadSgdbGrids(gameId, gameName) {
     const gridsDiv = document.getElementById("sgdb-grids");
