@@ -666,6 +666,11 @@ function attachEditHandlers() {
         if (term.length < 3) {
             document.getElementById("sgdb-results").innerHTML = "";
             document.getElementById("sgdb-grids").innerHTML = "";
+            // Also remove the leftover button
+            const oldBtn = document.querySelector(".sgdb-show-more");
+            if (oldBtn) oldBtn.remove();
+            sgdbAllGrids = [];
+            sgdbShownCount = 0;
             return;
         }
         searchSgdbGames(term);
@@ -782,11 +787,22 @@ async function onSave() {
 function openSgdbModal() {
     const modal = document.getElementById("sgdb-modal");
     modal.hidden = false;
+
+    // Reset the search input
     document.getElementById("sgdb-search-input").value = "";
+
+    // Clear results and grids
     document.getElementById("sgdb-results").innerHTML = "";
     document.getElementById("sgdb-grids").innerHTML = "";
+
+    // Remove the "Show more" button (it's outside .sgdb-grids!)
+    const oldBtn = document.querySelector(".sgdb-show-more");
+    if (oldBtn) oldBtn.remove();
+
+    // Reset pagination state
     sgdbAllGrids = [];
     sgdbShownCount = 0;
+
     document.getElementById("sgdb-search-input").focus();
 }
 
@@ -823,6 +839,10 @@ const SGDB_PAGE_SIZE = 5;
 async function loadSgdbGrids(gameId, gameName) {
     const gridsDiv = document.getElementById("sgdb-grids");
     gridsDiv.innerHTML = `<p>Loading covers for ${escapeHtml(gameName)}…</p>`;
+
+    // Remove any leftover "Show more" button from a previous game
+    const oldBtn = document.querySelector(".sgdb-show-more");
+    if (oldBtn) oldBtn.remove();
 
     try {
         const data = await sgdb(`/grids/game/${gameId}?dimensions=600x900,342x482`);
