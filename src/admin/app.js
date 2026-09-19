@@ -844,41 +844,22 @@ async function loadSgdbGrids(gameId, gameName) {
     }
 }
 
-async function selectSgdbGrid(imageUrl, thumbUrl) {
+function selectSgdbGrid(imageUrl, thumbUrl) {
     const fieldName = "cover_image";
     const input = document.querySelector(`[data-image="${fieldName}"]`);
     const prev = document.getElementById(`preview-${fieldName}`);
 
-    // 1. Show the thumbnail IMMEDIATELY (instant feedback)
+    // Store the CDN URL directly — no download, no upload
+    if (input) input.dataset.uploadedPath = imageUrl;
+    state.editing.data[fieldName] = imageUrl;
+
+    // Update preview immediately
     if (prev) {
-        prev.innerHTML = `<img src="${thumbUrl}" class="img-preview" id="preview-${fieldName}" style="opacity:0.6" />`;
+        prev.innerHTML = `<img src="${imageUrl}" class="img-preview" id="preview-${fieldName}" />`;
     }
-    toast("Downloading cover…", "info");
+
+    toast("Cover selected!");
     closeSgdbModal();
-
-    // 2. Download + upload in the background
-    try {
-        const proxyUrl = SGDB_PROXY + encodeURIComponent(imageUrl);
-        const imageRes = await fetch(proxyUrl);
-        if (!imageRes.ok) throw new Error("Failed to download image");
-        const blob = await imageRes.blob();
-        const file = new File([blob], "steamgriddb-cover.png", { type: blob.type || "image/png" });
-
-        const path = await uploadImage(file);
-
-        // 3. Swap to the real uploaded URL
-        if (input) input.dataset.uploadedPath = path;
-        const fresh = document.getElementById(`preview-${fieldName}`);
-        if (fresh) {
-            fresh.src = resolveImage(path);
-            fresh.style.opacity = "1";
-        }
-        toast("Cover saved!");
-    } catch (e) {
-        toast("Failed to save cover: " + e.message, "error");
-        // Roll back the preview
-        if (prev) prev.innerHTML = `<div id="preview-${fieldName}"></div>`;
-    }
 }
 
 /* =========================================================
