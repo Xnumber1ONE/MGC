@@ -9,7 +9,7 @@ platform:
   - PC
   - PS5
   - Xbox Series X/S
-cover_image: /images/uploads/87f22ef7349f8bc783fbaecb30429e4b.png
+cover_image: https://cdn2.steamgriddb.com/grid/95fde09fab8a6f0515e97847e05822fa.png
 date: "2026-09-12T12:54:00.000Z"
 excerpt: "The First Berserker: Khazan is a hardcore action role-playing game. The player will become Khazan, the great general of the Pelos empire, whom overcame death, and sets out to reveal the incidents that led to his downfall and seek vengeance on his enemies."
 pros:
