@@ -666,13 +666,17 @@ function attachEditHandlers() {
         if (term.length < 3) {
             document.getElementById("sgdb-results").innerHTML = "";
             document.getElementById("sgdb-grids").innerHTML = "";
-            // Also remove the leftover button
-            const oldBtn = document.querySelector(".sgdb-show-more");
-            if (oldBtn) oldBtn.remove();
+            document.querySelectorAll(".sgdb-show-more, .sgdb-end-note").forEach(el => el.remove());
             sgdbAllGrids = [];
             sgdbShownCount = 0;
             return;
         }
+        // Fresh search clears grids
+        document.getElementById("sgdb-grids").innerHTML = "";
+        document.querySelectorAll(".sgdb-show-more, .sgdb-end-note").forEach(el => el.remove());
+        sgdbAllGrids = [];
+        sgdbShownCount = 0;
+
         searchSgdbGames(term);
     }, 400));
 }
@@ -788,21 +792,22 @@ function openSgdbModal() {
     const modal = document.getElementById("sgdb-modal");
     modal.hidden = false;
 
-    // Reset the search input
     document.getElementById("sgdb-search-input").value = "";
-
-    // Clear results and grids
     document.getElementById("sgdb-results").innerHTML = "";
     document.getElementById("sgdb-grids").innerHTML = "";
 
-    // Remove the "Show more" button (it's outside .sgdb-grids!)
-    const oldBtn = document.querySelector(".sgdb-show-more");
-    if (oldBtn) oldBtn.remove();
+    // Remove leftover "show more" / end notes
+    document.querySelectorAll(".sgdb-show-more, .sgdb-end-note").forEach(el => el.remove());
 
-    // Reset pagination state
     sgdbAllGrids = [];
     sgdbShownCount = 0;
+    sgdbIsLoadingMore = false;
 
+    // Reset scroll to top
+    const modalBody = document.querySelector(".sgdb-modal-body");
+    if (modalBody) modalBody.scrollTop = 0;
+
+    attachSgdbInfiniteScroll();
     document.getElementById("sgdb-search-input").focus();
 }
 
@@ -861,16 +866,46 @@ async function loadSgdbGrids(gameId, gameName) {
     }
 }
 
+let sgdbAllGrids = [];
+let sgdbShownCount = 0;
+let sgdbIsLoadingMore = false;
+const SGDB_PAGE_SIZE = 5;
+
+async function loadSgdbGrids(gameId, gameName) {
+    const gridsDiv = document.getElementById("sgdb-grids");
+    gridsDiv.innerHTML = `<p>Loading covers for ${escapeHtml(gameName)}…</p>`;
+
+    const oldBtn = document.querySelector(".sgdb-show-more");
+    if (oldBtn) oldBtn.remove();
+
+    sgdbAllGrids = [];
+    sgdbShownCount = 0;
+    sgdbIsLoadingMore = false;
+
+    try {
+        const data = await sgdb(`/grids/game/${gameId}?dimensions=600x900,342x482`);
+        if (!data.data || !data.data.length) {
+            gridsDiv.innerHTML = `<p>No grids found for this game.</p>`;
+            return;
+        }
+        sgdbAllGrids = data.data;
+        gridsDiv.innerHTML = "";
+        renderGridBatch();
+    } catch (e) {
+        gridsDiv.innerHTML = `<p style="color:var(--brick)">Error: ${escapeHtml(e.message)}</p>`;
+    }
+}
+
 function renderGridBatch() {
+    if (sgdbIsLoadingMore) return;
+    if (sgdbShownCount >= sgdbAllGrids.length) return;
+
+    sgdbIsLoadingMore = true;
+
     const gridsDiv = document.getElementById("sgdb-grids");
     const end = Math.min(sgdbShownCount + SGDB_PAGE_SIZE, sgdbAllGrids.length);
     const batch = sgdbAllGrids.slice(sgdbShownCount, end);
 
-    // Remove old "Show more" button if present
-    const oldBtn = gridsDiv.querySelector(".sgdb-show-more");
-    if (oldBtn) oldBtn.remove();
-
-    // Append new grid items
     const html = batch.map(grid => `
       <div class="sgdb-grid-item" data-url="${grid.url}" data-thumb="${grid.thumb}">
         <img src="${grid.thumb}" alt="Cover option" loading="lazy" />
@@ -879,11 +914,10 @@ function renderGridBatch() {
 
     gridsDiv.insertAdjacentHTML("beforeend", html);
 
-    // Attach click handlers to the new items only
-    const newItems = gridsDiv.querySelectorAll(".sgdb-grid-item");
-    const startIdx = sgdbShownCount;
-    for (let i = startIdx; i < end; i++) {
-        const item = newItems[i];
+    // Bind click handlers on the new items only
+    const allItems = gridsDiv.querySelectorAll(".sgdb-grid-item");
+    for (let i = sgdbShownCount; i < end; i++) {
+        const item = allItems[i];
         if (item && !item.dataset.bound) {
             item.dataset.bound = "1";
             item.addEventListener("click", () => selectSgdbGrid(item.dataset.url, item.dataset.thumb));
@@ -891,25 +925,35 @@ function renderGridBatch() {
     }
 
     sgdbShownCount = end;
+    sgdbIsLoadingMore = false;
 
-    // Show "Show more" button if there are more
-    if (sgdbShownCount < sgdbAllGrids.length) {
-        const remaining = sgdbAllGrids.length - sgdbShownCount;
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "btn sgdb-show-more";
-        btn.textContent = `Show ${Math.min(SGDB_PAGE_SIZE, remaining)} more (${remaining} left)`;
-        btn.addEventListener("click", renderGridBatch);
-        gridsDiv.insertAdjacentElement("afterend", btn);
+    // If everything is loaded, show a small note
+    if (sgdbShownCount >= sgdbAllGrids.length) {
+        const note = document.createElement("p");
+        note.className = "sgdb-end-note";
+        note.textContent = "All covers loaded";
+        gridsDiv.insertAdjacentElement("afterend", note);
     }
+}
 
-    // Smooth-scroll the modal to reveal the new items
-    setTimeout(() => {
-        document.querySelector(".sgdb-modal-body").scrollTo({
-            top: document.querySelector(".sgdb-modal-body").scrollHeight,
-            behavior: "smooth"
-        });
-    }, 50);
+// Attach infinite scroll once
+function attachSgdbInfiniteScroll() {
+    const modalBody = document.querySelector(".sgdb-modal-body");
+    if (!modalBody || modalBody.dataset.scrollBound) return;
+    modalBody.dataset.scrollBound = "1";
+
+    modalBody.addEventListener("scroll", () => {
+        // Only paginate when grids are showing (not during game search)
+        if (!sgdbAllGrids.length) return;
+
+        const nearBottom =
+            modalBody.scrollTop + modalBody.clientHeight >=
+            modalBody.scrollHeight - 120;
+
+        if (nearBottom) {
+            renderGridBatch();
+        }
+    });
 }
 
 function selectSgdbGrid(imageUrl, thumbUrl) {

@@ -808,3 +808,11 @@ button {
     border-color: var(--gold);
     color: var(--gold);
 }
+
+.sgdb-end-note {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    padding: 12px 0;
+    margin: 0;
+}
