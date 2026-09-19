@@ -10,7 +10,7 @@ platform:
   - Xbox Series X/S
   - PS4
   - Xbox One
-cover_image: /images/uploads/fb5b3b5d234aa718062e3b4f6c826e23.png
+cover_image: https://cdn2.steamgriddb.com/grid/fb5b3b5d234aa718062e3b4f6c826e23.png
 date: "2026-09-12T23:25:00.000Z"
 excerpt: "Resident Evil 2 is a remake of 1998's Resident Evil 2. The game was not developed with the intent of improving the original, but rather a reimagining of the original story with redesigned maps, characters and story elements. Gameplay mechanics are more similar to Resident Evil 7: Biohazard though with the use of an over-the-shoulder camera."
 pros:
