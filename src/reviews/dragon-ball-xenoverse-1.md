@@ -12,8 +12,12 @@ platform:
   - Xbox One
 cover_image: /images/uploads/1789639766559-6b0e8204da2d4a5504adcdcb7875156f.jpg
 date: "2026-09-17T10:09:00.000Z"
-excerpt: |
-  dragon ball xenoverse 1-review
+excerpt: |+
+  Dragon Ball Xenoverse is the first installment of the Xenoverse series and the Dragon Ball game developed by Dimps. It is the first fighting game to feature full 3D battles similar to the Budokai Tenkaichi series. Fighters can traverse the levels free-roaming in large spaces and can fight on ground, in the air and underwater. The game features spoken dialogue from a majority of main characters while in battle, and characters show facial expressions when they strike an opponent or take damage. Although limited, the players have some freedom to explore the planet Earth as it exists in the Dragon Ball universe along with a handful of other locations
+
+
+
+
 pros:
   - فكرة القصة جميلة
   - عالم اللعبة رائع وجميل بالنسبة للعبة أنمي
