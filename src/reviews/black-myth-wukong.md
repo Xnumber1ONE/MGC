@@ -8,7 +8,7 @@ platform:
   - PC
   - PS5
   - Xbox Series X/S
-cover_image: /images/uploads/1789426987300-277074.jpg
+cover_image: https://cdn2.steamgriddb.com/grid/766fe52f8aac3ea321c29d353490c211.png
 date: "2026-09-14T23:01:00.000Z"
 excerpt: "Black Myth: Wukong is an action role-playing game developed by Game Science, inspired by the classical Chinese novel Journey to the West. Players control the Destined One, a staff-wielding monkey protagonist, through mostly linear levels interspersed with expansive areas. The game features Soulslike elements, a flexible skill system, and boss encounters of varying intensity. It was the first installment in the Black Myth series and is widely regarded as the first AAA game from the Chinese video game industry."
 pros:

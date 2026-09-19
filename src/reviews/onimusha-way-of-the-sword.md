@@ -8,7 +8,7 @@ platform:
   - PC
   - PS5
   - Xbox Series X/S
-cover_image: /images/uploads/a3962c0ca7ca8033daaa9fac886e90b8.jpg
+cover_image: https://cdn2.steamgriddb.com/grid/a3962c0ca7ca8033daaa9fac886e90b8.jpg
 date: "2026-09-14T11:57:00.000Z"
 excerpt: |-
   Fight through bloodstained battlefields of intense swordplay action. Explore the historic Japanese capital of Edo-era Kyoto, twisted by malevolent clouds of Malice.
