@@ -1,5 +1,5 @@
 ---
-title: Dragon ball xenoverse 1
+title: "Dragon Ball: Xenoverse"
 author: Luay
 meta:
   - RPG
